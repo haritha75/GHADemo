@@ -1,0 +1,91 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Admin Page</title>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>-->
+<!--    <script>-->
+<!--        var stompClient = null;-->
+
+<!--        function connect() {-->
+<!--            var socket = new SockJS('/ws');-->
+<!--            stompClient = Stomp.over(socket);-->
+<!--            stompClient.connect({}, function (frame) {-->
+<!--                console.log('Connected: ' + frame);-->
+<!--                stompClient.subscribe('/topic/user', function (message) {-->
+<!--                    showUserMessage(JSON.parse(message.body).content);-->
+<!--                });-->
+<!--            });-->
+<!--        }-->
+
+<!--        function sendAdminMessage() {-->
+<!--            var message = {-->
+<!--                from: 'Admin',-->
+<!--                content: document.getElementById('adminMessage').value-->
+<!--            };-->
+<!--            stompClient.send("/app/admin", {}, JSON.stringify(message));-->
+<!--        }-->
+
+<!--        function showUserMessage(message) {-->
+<!--            var response = document.getElementById('response');-->
+<!--            var p = document.createElement('p');-->
+<!--            p.appendChild(document.createTextNode(message));-->
+<!--            response.appendChild(p);-->
+<!--        }-->
+
+<!--        window.onload = connect;-->
+<!--    </script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h2>Admin Page</h2>-->
+<!--<input type="text" id="adminMessage" placeholder="Enter message for user">-->
+<!--<button onclick="sendAdminMessage()">Send</button>-->
+<!--<div id="response"></div>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+    <script>
+        var stompClient = null;
+
+        function connect() {
+            var socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/admin', function (message) {
+                    showUserMessage(JSON.parse(message.body).content);
+                });
+            });
+        }
+
+        function sendAdminMessage() {
+            var message = {
+                from: 'Admin',
+                content: document.getElementById('adminMessage').value
+            };
+            stompClient.send("/app/admin", {}, JSON.stringify(message));
+        }
+
+        function showUserMessage(message) {
+            var response = document.getElementById('response');
+            var p = document.createElement('p');
+            p.appendChild(document.createTextNode(message));
+            response.appendChild(p);
+        }
+
+        window.onload = connect;
+    </script>
+</head>
+<body>
+<h2>Admin Page</h2>
+<input type="text" id="adminMessage" placeholder="Enter message for user">
+<button onclick="sendAdminMessage()">Send</button>
+<div id="response"></div>
+</body>
+</html>
