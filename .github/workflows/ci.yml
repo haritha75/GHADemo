@@ -39,8 +39,8 @@ jobs:
         if: ${{ contains(github.event.head_commit.message, 'test commit') }}
 
       - name: Upload jar to GitHub
-        if: ${{ success() }}
+        if: github.actor == 'haritha7' && success()
         uses: actions/upload-artifact@v3
         with:
-          name: myapp-jar
-          path: target/*.jar
+            name: myapp-jar
+            path: target/*.jar
