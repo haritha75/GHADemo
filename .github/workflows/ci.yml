@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if : github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'  # Job-level condition
 
     steps:
       - name: Checkout code
@@ -24,14 +24,21 @@ jobs:
           java-version: '19'
           distribution: 'temurin'
 
+      - name: Check result
+        if: github.ref == 'refs/heads/main' && github.actor == 'haritha75'
+        run: |
+          echo "event = ${{ github.event_name }}"
+          echo "Repository = ${{ github.repository }}"
+          echo "user = ${{ github.actor }}"
+
       - name: Build with Maven
         run: mvn clean install -f pom.xml
 
-      - name: test
+      - name: Test
         run: mvn test
         if: ${{ contains(github.event.head_commit.message, 'test commit') }}
 
-      - name: Upload jar to Github
+      - name: Upload jar to GitHub
         if: ${{ success() }}
         uses: actions/upload-artifact@v3
         with:
