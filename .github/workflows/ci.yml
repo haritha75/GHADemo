@@ -1,4 +1,4 @@
-name: Spring demo GHA
+name: Spring Demo CI
 
 on:
   push:
@@ -12,27 +12,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if : github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup JDK
+      - name: Set up JDK 19
         uses: actions/setup-java@v2
         with:
-          java-version: '19'
           distribution: 'temurin'
+          java-version: '19'
 
       - name: Build with Maven
-        run: mvn clean install -- file pom.xml
+        run: mvn clean install
 
-      - name: test
+      - name: Run tests
         run: mvn test
-        if: ${{contains(github.event.head_commit.message,'test commit')}}
 
-      - name: Upload jar to Github
-        if: ${{success()}}
+      - name: Upload jar to GitHub
+        if: ${{ success() }}
         uses: actions/upload-artifact@v3
         with:
           name: myapp-jar
